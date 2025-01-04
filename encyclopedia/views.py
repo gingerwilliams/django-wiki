@@ -9,6 +9,7 @@ def index(request):
         "entries": util.list_entries()
     })
 
-def entry(request):
-    return HttpResponse("Hello, World!")
-
+def wiki(request, wiki):
+    return render(request, "encyclopedia/wiki.html", {
+        "name": util.get_entry(wiki)
+    })
