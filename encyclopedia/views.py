@@ -10,6 +10,10 @@ def index(request):
     })
 
 def wiki(request, wiki):
+    if wiki not in util.list_entries():
+        return render(request, "encyclopedia/error.html", {
+            "error": "The requested page was not found."
+        })
     return render(request, "encyclopedia/wiki.html", {
         "name": util.get_entry(wiki)
     })
