@@ -18,9 +18,19 @@ def wiki(request, wiki):
 
 def search(request):
     q = request.GET['q']
+    entries = util.list_entries()
+    results = []
 
-    if q in util.list_entries():
-        return HttpResponseRedirect(q)
+    for entry in entries:
+        if q in entry.casefold():
+            results.append(entry)
+
+    if q in entries:
+        return HttpResponseRedirect(f"wiki/{q}")
+    elif len(results) > 0:
+        return render(request, "encyclopedia/search.html", {
+            "subentries": results
+        })
     else: 
         return render(request, "encyclopedia/error.html")
 
