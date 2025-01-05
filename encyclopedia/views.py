@@ -5,7 +5,6 @@ from django.urls import reverse
 
 from . import util
 
-
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
@@ -32,6 +31,26 @@ def search(request):
             "subentries": results
         })
     else: 
-        return render(request, "encyclopedia/error.html")
+        return render(request, "encyclopedia/error.html", {
+            "title": "404 - Page Not Found",
+            "message": "Sorry, The page you are looking for does not exist."
+        })
+
+def create(request):
+    return render(request, "encyclopedia/create.html")
+
+def new(request):
+    q = request.POST['q']
+    as_q = request.POST['as_q']
+    entries = util.list_entries()
+
+    if q in entries:
+        return render(request, "encyclopedia/error.html", {
+            "title": "Whoops...",
+            "message": "This page already exists"
+        })
+    else:
+        util.save_entry(q, as_q)
+        return HttpResponseRedirect(f"wiki/{q}")
 
 # https://django-book-new.readthedocs.io/en/latest/chapter07.html
