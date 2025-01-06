@@ -12,7 +12,8 @@ def index(request):
 
 def wiki(request, wiki):
     return render(request, "encyclopedia/wiki.html", {
-        "name": util.get_entry(wiki)
+        "content": util.get_entry(wiki),
+        "title": wiki
     })
 
 def search(request):
@@ -52,5 +53,18 @@ def new(request):
     else:
         util.save_entry(q, as_q)
         return HttpResponseRedirect(f"wiki/{q}")
+
+def edit(request, wiki):
+    return render(request, "encyclopedia/edit.html", {
+        "content": util.get_entry(wiki),
+        "title": wiki,
+    })
+
+def update(request):
+    q = request.POST['q']
+    as_q = request.POST['as_q']
+
+    util.save_entry(q, as_q)
+    return HttpResponseRedirect(f"wiki/{q}")
 
 # https://django-book-new.readthedocs.io/en/latest/chapter07.html
