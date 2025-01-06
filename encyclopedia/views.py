@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from . import util
+import random
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -66,5 +67,12 @@ def update(request):
 
     util.save_entry(q, as_q)
     return HttpResponseRedirect(f"wiki/{q}")
+
+def lucky(request):
+    list = util.list_entries()
+    randomInt = random.randint(0, len(list) - 1)
+    luck = list[randomInt]
+
+    return HttpResponseRedirect(f"wiki/{luck}")
 
 # https://django-book-new.readthedocs.io/en/latest/chapter07.html
