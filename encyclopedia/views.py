@@ -14,8 +14,14 @@ def index(request):
 
 def wiki(request, wiki):
     content = util.get_entry(wiki)
-    content_converted = markdown2.markdown(content)
+    
+    if wiki not in util.list_entries():
+        return render(request, "encyclopedia/error.html", {
+            "title": "404 - Page Not Found",
+            "message": "Sorry, The page you are looking for does not exist."
+        })
 
+    content_converted = markdown2.markdown(content)
     return render(request, "encyclopedia/wiki.html", {
         "content": content_converted,
         "title": wiki
