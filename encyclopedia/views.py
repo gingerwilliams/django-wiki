@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+import markdown2
 
 from . import util
 import random
@@ -12,8 +13,11 @@ def index(request):
     })
 
 def wiki(request, wiki):
+    content = util.get_entry(wiki)
+    content_converted = markdown2.markdown(content)
+
     return render(request, "encyclopedia/wiki.html", {
-        "content": util.get_entry(wiki),
+        "content": content_converted,
         "title": wiki
     })
 
